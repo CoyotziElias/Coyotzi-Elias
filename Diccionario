@@ -1,0 +1,46 @@
+import tkinter as tk
+from tkinter import messagebox
+
+ventana = tk.Tk()
+ventana.title("Registro de Estudiantes")
+
+estudiantes = {}
+def guardar():
+    try:
+        num = int(num_entry.get())
+        nombre = nombre_entry.get()
+        calif = float(calif_entry.get())
+        sexo = sexo_entry.get()
+        if len(sexo) != 1:
+            raise ValueError("Sexo debe ser una sola letra.")
+        estudiantes[f"Estudiante {num}"] = {
+            "nombre": nombre,
+            "calificacion": calif,
+            "sexo": sexo
+        }
+        for entry in [num_entry, nombre_entry, calif_entry, sexo_entry]:
+            entry.delete(0, tk.END)
+        if len(estudiantes) == 3:
+            mostrar()
+    except ValueError as e:
+        messagebox.showerror("Entrada inválida", str(e))
+def mostrar():
+    salida.delete(1.0, tk.END)
+    for clave, datos in estudiantes.items():
+        salida.insert(tk.END, f"{clave}:\n")
+        salida.insert(tk.END, f"  Nombre: {datos['nombre']}\n")
+        salida.insert(tk.END, f"  Calificación: {datos['calificacion']}\n")
+        salida.insert(tk.END, f"  Sexo: {datos['sexo']}\n\n")
+campos = [("No.", 0), ("Nombre", 1), ("Calificación", 2), ("Sexo", 3)]
+entradas = []
+for texto, fila in campos:
+    tk.Label(ventana, text=texto + ":").grid(row=fila, column=0)
+    entry = tk.Entry(ventana)
+    entry.grid(row=fila, column=1)
+    entradas.append(entry)
+num_entry, nombre_entry, calif_entry, sexo_entry = entradas
+tk.Button(ventana, text="Guardar", command=guardar).grid(row=4, column=0, columnspan=2, pady=5)
+salida = tk.Text(ventana, height=10, width=40)
+salida.grid(row=5, column=0, columnspan=2)
+
+ventana.mainloop()
