@@ -1,0 +1,85 @@
+import tkinter as tk
+from tkinter import messagebox
+
+def pedir_datos(figura):
+    for widget in entrada_frame.winfo_children():
+        widget.destroy()
+
+    global entradas
+    entradas = {}
+
+    if figura == "Cuadrado":
+        tk.Label(entrada_frame, text="Lado:").pack()
+        entradas["Lado"] = tk.Entry(entrada_frame)
+        entradas["Lado"].pack()
+
+    elif figura == "Rectángulo":
+        tk.Label(entrada_frame, text="Base:").pack()
+        entradas["Base"] = tk.Entry(entrada_frame)
+        entradas["Base"].pack()
+        tk.Label(entrada_frame, text="Altura:").pack()
+        entradas["Altura"] = tk.Entry(entrada_frame)
+        entradas["Altura"].pack()
+
+    elif figura == "Triángulo":
+        tk.Label(entrada_frame, text="Base:").pack()
+        entradas["Base"] = tk.Entry(entrada_frame)
+        entradas["Base"].pack()
+        tk.Label(entrada_frame, text="Altura:").pack()
+        entradas["Altura"] = tk.Entry(entrada_frame)
+        entradas["Altura"].pack()
+
+    elif figura == "Círculo":
+        tk.Label(entrada_frame, text="Radio:").pack()
+        entradas["Radio"] = tk.Entry(entrada_frame)
+        entradas["Radio"].pack()
+
+    guardar_btn.config(command=lambda: calcular_area(figura))
+
+def calcular_area(figura):
+    try:
+        datos = {"Figura": figura}
+
+        if figura == "Cuadrado":
+            lado = float(entradas["Lado"].get())
+            datos["Lado"] = lado
+            datos["Área"] = lado ** 2
+
+        elif figura == "Rectángulo":
+            base = float(entradas["Base"].get())
+            altura = float(entradas["Altura"].get())
+            datos["Base"] = base
+            datos["Altura"] = altura
+            datos["Área"] = base * altura
+
+        elif figura == "Triángulo":
+            base = float(entradas["Base"].get())
+            altura = float(entradas["Altura"].get())
+            datos["Base"] = base
+            datos["Altura"] = altura
+            datos["Área"] = (base * altura) / 2
+
+        elif figura == "Círculo":
+            radio = float(entradas["Radio"].get())
+            datos["Radio"] = radio
+            datos["Área"] = 3.1416 * radio ** 2
+        resultado = "\n".join(f"{k}: {v}" for k, v in datos.items())
+        messagebox.showinfo("Datos Guardados", resultado)
+
+    except ValueError:
+        messagebox.showerror("Error", "Por favor, ingresa solo números válidos.")
+
+ventana = tk.Tk()
+ventana.title("Cálculo de Áreas - Proyecto Escolar")
+tk.Label(ventana, text="Selecciona una figura para calcular el área:", font=("Arial", 12)).pack(pady=10)
+botones_frame = tk.Frame(ventana)
+botones_frame.pack()
+figuras = ["Cuadrado", "Rectángulo", "Triángulo", "Círculo"]
+for figura in figuras:
+    tk.Button(botones_frame, text=figura, width=15, command=lambda f=figura: pedir_datos(f)).pack(pady=3)
+entrada_frame = tk.Frame(ventana)
+entrada_frame.pack(pady=10)
+guardar_btn = tk.Button(ventana, text="Guardar", bg="lightblue")
+guardar_btn.pack(pady=5)
+
+ventana.mainloop()
