@@ -1,0 +1,59 @@
+from datetime import datetime
+
+class Empleado:
+    def __init__(self, nombre, id):
+        self.nombre = nombre
+        self.id = id
+
+    def guardar(self):
+        fecha = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        with open("empleados.txt", "a") as archivo:
+            archivo.write("Fecha: " + fecha + "\n")
+            archivo.write("Nombre: " + self.nombre + "\n")
+            archivo.write("ID: " + self.id + "\n")
+
+class Medico(Empleado):
+    def __init__(self, nombre, id, especialidad):
+        super().__init__(nombre, id)
+        self.especialidad = especialidad
+
+    def guardar(self):
+        super().guardar()
+        with open("empleados.txt", "a") as archivo:
+            archivo.write("Especialidad: " + self.especialidad + "\n")
+            archivo.write("-----\n")
+
+class Enfermero(Empleado):
+    def __init__(self, nombre, id, turno):
+        super().__init__(nombre, id)
+        self.turno = turno
+
+    def guardar(self):
+        super().guardar()
+        with open("empleados.txt", "a") as archivo:
+            archivo.write("Turno: " + self.turno + "\n")
+            archivo.write("-----\n")
+
+class Administrativo(Empleado):
+    def __init__(self, nombre, id, departamento):
+        super().__init__(nombre, id)
+        self.departamento = departamento
+
+    def guardar(self):
+        super().guardar()
+        with open("empleados.txt", "a") as archivo:
+            archivo.write("Departamento: " + self.departamento + "\n")
+            archivo.write("-----\n")
+
+m = Medico("Totis", "M001", "Cardiología")
+e = Enfermero("Galleta", "E002", "Noche")
+a = Administrativo("Tofi", "A003", "Recursos Humanos")
+
+m.guardar()
+e.guardar()
+a.guardar()
+
+print("Contenido del archivo:\n")
+with open("empleados.txt", "r") as archivo:
+    for linea in archivo:
+        print(linea.strip())
